@@ -1,14 +1,31 @@
 import Ship from "./Ship.js";
 
 export default class Gameboard {
+  #attacks;
   constructor(size = 8) {
     this.size = size;
     this.field = this.#generateMap();
     this.ships = this.#generateShips();
+    this.#attacks = { hit: 0, miss: 0 };
   }
 
   recieveAttack([y, x]) {
-    this.field[y][x] = 1;
+    if (this.field[y][x] instanceof Ship) {
+      this.#addHits();
+      this.field[y][x].hit(); // hit a ship
+      if (this.field[y][x].isSunk())
+        this.ships.splice(this.field[y][x].id, 1, null);
+    } else {
+      this.#addMisses();
+      this.field[y][x] = 1;
+    }
+  }
+
+  getStat() {
+    return {
+      hit: this.#attacks.hit,
+      miss: this.#attacks.miss,
+    };
   }
 
   deployShip(id, [y, x]) {
@@ -36,7 +53,13 @@ export default class Gameboard {
     });
   }
 
-  // ------ Privates
+  isAllShipSunk() {
+    let sunkCount = 0;
+    this.ships.forEach((s) => (s === null ? sunkCount++ : 0));
+    return sunkCount === this.ships.length;
+  }
+
+  // ------ Private
   #generateMap() {
     const grid = [];
     let row = [];
@@ -61,5 +84,13 @@ export default class Gameboard {
       new Ship(4, 4),
       new Ship(5, 5),
     ];
+  }
+
+  #addHits() {
+    this.#attacks.hit += 1;
+  }
+
+  #addMisses() {
+    this.#attacks.miss += 1;
   }
 }

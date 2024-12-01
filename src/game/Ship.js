@@ -11,7 +11,7 @@ export default class Ship {
   }
 
   isSunk() {
-    return this.hitCount >= this.length;
+    return this.hitCount === this.length;
   }
 
   toggleOrientation() {
