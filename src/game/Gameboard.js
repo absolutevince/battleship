@@ -2,8 +2,9 @@ import Ship from "./Ship.js";
 
 export default class Gameboard {
   #attacks;
+  #size;
   constructor(size = 8) {
-    this.size = size;
+    this.#size = size;
     this.field = this.#generateMap();
     this.ships = this.#generateShips();
     this.#attacks = { hit: 0, miss: 0 };
@@ -19,6 +20,8 @@ export default class Gameboard {
       this.#addMisses();
       this.field[y][x] = 1;
     }
+    // checks if all the ships sunk
+    this.isAllShipSunk();
   }
 
   getStat() {
@@ -32,7 +35,7 @@ export default class Gameboard {
     const ship = this.ships[id];
     for (let i = 0; i < ship.length; i++) {
       if (ship.orientation === "h") {
-        if (x + ship.length > this.size - 1) {
+        if (x + ship.length > this.#size - 1) {
           throw new Error("Cannot deploy beyond the border");
         }
         this.field[y][x + i] = ship;
@@ -60,13 +63,14 @@ export default class Gameboard {
   }
 
   // ------ Private
+
   #generateMap() {
     const grid = [];
     let row = [];
-    for (let i = 0; i < this.size * this.size; i++) {
+    for (let i = 0; i < this.#size * this.#size; i++) {
       row.push(0);
 
-      if (row.length === this.size) {
+      if (row.length === this.#size) {
         grid.push(row);
         row = [];
       }
