@@ -3,10 +3,13 @@ import Ship from "./Ship.js";
 export default class Gameboard {
   #attacks;
   #size;
+  #ships;
+  #undeployedShips;
   constructor(size = 8) {
     this.#size = size;
     this.field = this.#generateMap();
-    this.ships = this.#generateShips();
+    this.#ships = this.#generateShips();
+    this.#undeployedShips = [...this.#ships];
     this.#attacks = { hit: 0, miss: 0 };
   }
 
@@ -15,7 +18,7 @@ export default class Gameboard {
       this.#addHits();
       this.field[y][x].hit(); // hit a ship
       if (this.field[y][x].isSunk())
-        this.ships.splice(this.field[y][x].id, 1, null);
+        this.#ships.splice(this.field[y][x].id, 1, null);
     } else {
       this.#addMisses();
       this.field[y][x] = 1;
@@ -32,7 +35,7 @@ export default class Gameboard {
   }
 
   deployShip(id, [y, x]) {
-    const ship = this.ships[id];
+    const ship = this.#undeployedShips[id];
     for (let i = 0; i < ship.length; i++) {
       if (ship.orientation === "h") {
         if (x + ship.length > this.#size - 1) {
@@ -46,20 +49,40 @@ export default class Gameboard {
         this.field[y - i][x] = ship;
       }
     }
+    this.#undeployedShips[id] = null;
+    // replace the value of index id with null to keep on correctly indexing the item using it's id, since the ship's id is the index its index in the array
+  }
+
+  getShips(id) {
+    if (id === undefined) {
+      return this.#ships;
+    } else {
+      return this.#ships[id];
+    }
+  }
+
+  getUndeployedShips(id) {
+    if (id === undefined) {
+      return this.#undeployedShips;
+    } else {
+      return this.#undeployedShips[id];
+    }
   }
 
   toggleShipOrientation(id) {
-    this.ships.forEach((ship) => {
-      if (ship.id === id) {
-        ship.toggleOrientation();
+    this.#undeployedShips.forEach((ship) => {
+      if (ship) {
+        if (ship.id === id) {
+          ship.toggleOrientation();
+        }
       }
     });
   }
 
   isAllShipSunk() {
     let sunkCount = 0;
-    this.ships.forEach((s) => (s === null ? sunkCount++ : 0));
-    return sunkCount === this.ships.length;
+    this.#ships.forEach((s) => (s === null ? sunkCount++ : 0));
+    return sunkCount === this.#ships.length;
   }
 
   // ------ Private

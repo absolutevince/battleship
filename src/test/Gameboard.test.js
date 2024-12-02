@@ -27,6 +27,11 @@ describe("Gameboard ships", () => {
     gb.deployShip(1, [5, 3]); // deploy ship[1] vertically
   });
 
+  test("replace deployed ship in undeployedShips null", () => {
+    console.log(gb.getUndeployedShips());
+    expect(gb.getUndeployedShips(0)).toBe(null);
+  });
+
   test("Place the head of the ship correctly", () => {
     expect(gb.field[2][3]).toBeInstanceOf(Object);
   });
@@ -37,7 +42,7 @@ describe("Gameboard ships", () => {
       [2, 3],
       [2, 4],
     ].forEach(([x, y]) => {
-      expect(gb.field[x][y]).toEqual(gb.ships[0]);
+      expect(gb.field[x][y]).toEqual(gb.getShips(0));
     });
   });
 
@@ -46,7 +51,7 @@ describe("Gameboard ships", () => {
       [5, 3],
       [4, 3],
     ].forEach(([x, y]) => {
-      expect(gb.field[x][y]).toEqual(gb.ships[1]);
+      expect(gb.field[x][y]).toEqual(gb.getShips(1));
     });
   });
 
@@ -82,7 +87,7 @@ describe("Recieve Attack", () => {
 describe("Sunk all ships", () => {
   beforeAll(() => {
     gb = new Gameboard();
-    for (let i = 0; i < gb.ships.length; i++) {
+    for (let i = 0; i < gb.getShips().length; i++) {
       gb.deployShip(i, [i, 0]); // deploy ships depending on it's length, 1st ship is @ [0,0], [0,1]
     }
     [0, 1].forEach((x) => {
