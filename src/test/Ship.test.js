@@ -7,7 +7,7 @@ describe("Ship's destruction", () => {
     ship = new Ship(2);
   });
 
-  test("Sunk one ship", () => {
+  test("Ship sinking", () => {
     ship.hit();
     ship.hit();
     expect(ship.isSunk()).toBe(true);
