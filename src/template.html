@@ -5,5 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Battleship</title>
   </head>
-  <body></body>
+  <body>
+    <section class="nav">
+      <select name="ships" id="ship_select">
+        <!-- Ships options -->
+      </select>
+      <input type="number" name="y" id="coorY" max="7" min="0" />
+      <input type="number" name="x" id="coorX" max="7" min="0" />
+      <button class="deploy_button">Deploy</button>
+    </section>
+    <section id="gameboard">
+      <div class="player_board"></div>
+      <div class="computer_board"></div>
+    </section>
+  </body>
 </html>

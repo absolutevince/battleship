@@ -1,0 +1,16 @@
+#gameboard {
+  display: flex;
+  gap: 1rem;
+}
+
+.player_board,
+.computer_board {
+  display: grid;
+  grid-template-rows: repeat(8, 32px);
+  text-align: center;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(8, 32px);
+}
