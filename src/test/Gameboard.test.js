@@ -1,25 +1,25 @@
-import Gameboard from "../game/Gameboard";
+import Gameboard from '../game/Gameboard';
 
 let gb = null;
 
-describe("Gameboard", () => {
+describe('Gameboard', () => {
   beforeAll(() => {
     gb = new Gameboard();
     gb.recieveAttack([3, 3]);
   });
 
-  test("have rows equal to the size", () => {
+  test('have rows equal to the size', () => {
     expect(gb.field.length).toBe(8);
   });
 
-  test("each rows with cols each", () => {
+  test('each rows with cols each', () => {
     gb.field.forEach((row) => {
       expect(row.length).toBe(8);
     });
   });
 });
 
-describe("Gameboard ships", () => {
+describe('Gameboard ships', () => {
   beforeAll(() => {
     gb = new Gameboard();
     gb.deployShip(0, [2, 3]); // default ship's orientation is horizontal
@@ -27,16 +27,15 @@ describe("Gameboard ships", () => {
     gb.deployShip(1, [5, 3]); // deploy ship[1] vertically
   });
 
-  test("replace deployed ship in undeployedShips null", () => {
-    console.log(gb.getUndeployedShips());
+  test('replace deployed ship in undeployedShips null', () => {
     expect(gb.getUndeployedShips(0)).toBe(null);
   });
 
-  test("Place the head of the ship correctly", () => {
+  test('Place the head of the ship correctly', () => {
     expect(gb.field[2][3]).toBeInstanceOf(Object);
   });
 
-  test("Occupied the adjacent blocks based on ships orientaion // horizontal", () => {
+  test('Occupied the adjacent blocks based on ships orientaion // horizontal', () => {
     // two sets of coordinates since ships[0] is just a length of 2
     [
       [2, 3],
@@ -46,7 +45,7 @@ describe("Gameboard ships", () => {
     });
   });
 
-  test("Occupied the adjacent blocks based on ships orientaion // vertical", () => {
+  test('Occupied the adjacent blocks based on ships orientaion // vertical', () => {
     [
       [5, 3],
       [4, 3],
@@ -55,36 +54,36 @@ describe("Gameboard ships", () => {
     });
   });
 
-  test("Prevent ships from deploying beyond the border", () => {
+  test('Prevent ships from deploying beyond the border', () => {
     expect(() => {
       gb.deployShip(4, [4, 5]);
-    }).toThrow(new Error("Cannot deploy beyond the border"));
+    }).toThrow(new Error('Cannot deploy beyond the border'));
   });
 });
 
-describe("Recieve Attack", () => {
+describe('Recieve Attack', () => {
   beforeEach(() => {
     gb = new Gameboard();
     gb.deployShip(0, [2, 3]);
   });
 
-  test("Correctly attack a field block", () => {
+  test('Correctly attack a field block', () => {
     gb.recieveAttack([7, 7]);
     expect(gb.field[7][7]).toBe(1);
   });
 
-  test("record missed attacks", () => {
+  test('record missed attacks', () => {
     gb.recieveAttack([0, 0]);
     expect(gb.getStat().miss).toEqual(1);
   });
 
-  test("record hit attacks", () => {
+  test('record hit attacks', () => {
     gb.recieveAttack([2, 3]);
     expect(gb.getStat().hit).toEqual(1);
   });
 });
 
-describe("Sunk all ships", () => {
+describe('Sunk all ships', () => {
   beforeAll(() => {
     gb = new Gameboard();
     for (let i = 0; i < gb.getShips().length; i++) {
@@ -100,7 +99,7 @@ describe("Sunk all ships", () => {
     [0, 1, 2, 3, 4].forEach((x) => gb.recieveAttack([5, x]));
   });
 
-  test("All ship Sunk", () => {
+  test('All ship Sunk', () => {
     expect(gb.isAllShipSunk()).toBe(true);
   });
 });
