@@ -1,7 +1,7 @@
-import Gameboard from './Gameboard';
+import Gameboard from "./Gameboard";
 
 export default class Computer {
-  static name = 'Computer';
+  static name = "Computer";
   static gameboard = new Gameboard();
 
   static randomCoordinates() {
@@ -12,15 +12,22 @@ export default class Computer {
   }
 
   static deployAllShips() {
-    const ids = this.gameboard.getShips().map((s) => s.id);
-    while (ids.length > 0) {
-      const current = ids[0];
+    const ids = this.gameboard.getUndeployedShips().map((s) => s.id);
+    let current = ids[0];
+
+    while (ids.length) {
+      const rotate = Math.floor(Math.random() * 2);
+      const [y, x] = this.randomCoordinates();
+
+      if (rotate) this.gameboard.toggleShipOrientation(current);
       try {
-        this.gameboard.deployShip(current, this.randomCoordinates());
+        this.gameboard.deployShip(current, [y, x]);
       } catch (error) {
+        current = ids[0];
         continue;
       }
-      ids.shift();
+
+      current = ids.shift();
     }
   }
 }

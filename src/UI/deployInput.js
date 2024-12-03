@@ -9,6 +9,8 @@ export default function deployInput() {
   const xInput = document.createElement("input");
   const yInput = document.createElement("input");
   const button = document.createElement("button");
+  const rotateButton = document.createElement("button");
+  const orientationText = document.createElement("p");
 
   [xInput, yInput].forEach((input) => {
     input.max = MAX;
@@ -18,16 +20,21 @@ export default function deployInput() {
 
   shipSelect.className = "ship_select";
   button.textContent = "Deploy";
+  rotateButton.textContent = "rotate";
 
   fillShipsSelect();
+  updateCurrentOrientation();
 
   button.addEventListener("click", () => {
-    BattleShip.player.gameboard.deployShip(shipSelect.value, [
-      +yInput.value,
-      +xInput.value,
-    ]);
-    displayGameboard("player", BattleShip.player.gameboard.field);
+    BattleShip.deployPlayerShip(shipSelect.value, [yInput.value, xInput.value]);
+    displayGameboard(BattleShip.player.name, BattleShip.player.gameboard.field);
     fillShipsSelect();
+    updateCurrentOrientation();
+  });
+
+  rotateButton.addEventListener("click", () => {
+    BattleShip.player.gameboard.toggleShipOrientation(+shipSelect.value);
+    updateCurrentOrientation();
   });
 
   // -------
@@ -43,5 +50,10 @@ export default function deployInput() {
     });
   }
 
-  container.append(shipSelect, yInput, xInput, button);
+  function updateCurrentOrientation() {
+    const ship = BattleShip.player.gameboard.getUndeployedShips(shipSelect.value);
+    if (ship) orientationText.textContent = ship.orientation === "h" ? "Horizontal" : "Vertical";
+  }
+
+  container.append(shipSelect, rotateButton, yInput, xInput, button, orientationText);
 }
