@@ -1,0 +1,30 @@
+.wrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.deploy_input {
+  margin-bottom: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.deploy_input input {
+  width: 5ch;
+}
+
+.gameboard {
+  display: flex;
+  gap: 1rem;
+}
+
+.player_board,
+.computer_board {
+  display: grid;
+  grid-template-rows: repeat(8, 32px);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: repeat(8, 32px);
+}
