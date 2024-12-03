@@ -1,8 +1,8 @@
+import BattleShip from "../game/Battleship";
+
 export default function displayGameboard(user, playerField) {
   const container =
-    user === "player"
-      ? document.querySelector(".player_board")
-      : document.querySelector(".computer_board");
+    user === BattleShip.player.name ? document.querySelector(".player_board") : document.querySelector(".computer_board");
   container.innerHTML = "";
   playerField.forEach((row, rIndex) => {
     const rowEl = document.createElement("div");

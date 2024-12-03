@@ -17,11 +17,11 @@ export default class Gameboard {
     if (this.field[y][x] instanceof Ship) {
       this.#addHits();
       this.field[y][x].hit(); // hit a ship
-      if (this.field[y][x].isSunk())
-        this.#ships.splice(this.field[y][x].id, 1, null);
+      if (this.field[y][x].isSunk()) this.#ships.splice(this.field[y][x].id, 1, null);
+      this.field[y][x] = 1;
     } else {
       this.#addMisses();
-      this.field[y][x] = 1;
+      this.field[y][x] = -1;
     }
     // checks if all the ships sunk
     this.isAllShipSunk();
@@ -36,17 +36,14 @@ export default class Gameboard {
 
   deployShip(id, [y, x]) {
     const ship = this.#undeployedShips[id];
+
+    this.#checkForErrors(ship, [y, x]);
+
     for (let i = 0; i < ship.length; i++) {
       if (ship.orientation === "h") {
-        if (x + ship.length > this.#size - 1) {
-          throw new Error("Cannot deploy beyond the border");
-        }
         this.field[y][x + i] = ship;
       } else {
-        if (y - ship.length < 0) {
-          throw new Error("Cannot deploy beyond the border");
-        }
-        this.field[y - i][x] = ship;
+        this.field[y + i][x] = ship;
       }
     }
     this.#undeployedShips[id] = null;
@@ -85,7 +82,44 @@ export default class Gameboard {
     return sunkCount === this.#ships.length;
   }
 
+  allShipsDeployed() {
+    let deployedCount = 0;
+    this.#undeployedShips.forEach((ship) => {
+      if (ship === null) deployedCount++;
+    });
+
+    return deployedCount === this.#undeployedShips.length;
+  }
+
   // ------ Private
+  #checkForErrors(ship, [y, x]) {
+    const beyondBorderError = "Cannot deploy beyond the border";
+    const alreadyOccupiedError = "A Ship has already been deploy on that coordinates";
+
+    if (ship.orientation === "h") {
+      if (x + ship.length - 1 > this.#size - 1) {
+        throw new Error(beyondBorderError);
+      }
+    } else {
+      if (y + ship.length - 1 > this.#size - 1) {
+        throw new Error(beyondBorderError);
+      }
+    }
+    if (this.#hasShipDeployed(ship, [y, x])) {
+      throw new Error(alreadyOccupiedError);
+    }
+  }
+
+  #hasShipDeployed(ship, [y, x]) {
+    for (let i = 0; i < ship.length; i++) {
+      if (ship.orientation === "h") {
+        if (this.field[y][x + i] !== 0) return true;
+      } else {
+        if (this.field[y + i][x] !== 0) return true;
+      }
+    }
+    return false;
+  }
 
   #generateMap() {
     const grid = [];
@@ -103,14 +137,7 @@ export default class Gameboard {
   }
 
   #generateShips() {
-    return [
-      new Ship(2, 0),
-      new Ship(2, 1),
-      new Ship(3, 2),
-      new Ship(3, 3),
-      new Ship(4, 4),
-      new Ship(5, 5),
-    ];
+    return [new Ship(2, 0), new Ship(2, 1), new Ship(3, 2), new Ship(3, 3), new Ship(4, 4), new Ship(5, 5)];
   }
 
   #addHits() {
