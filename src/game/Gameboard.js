@@ -5,26 +5,30 @@ export default class Gameboard {
   #size;
   #ships;
   #undeployedShips;
+  #destroyedBlocks;
   constructor(size = 8) {
     this.#size = size;
     this.field = this.#generateMap();
     this.#ships = this.#generateShips();
     this.#undeployedShips = [...this.#ships];
     this.#attacks = { hit: 0, miss: 0 };
+    this.#destroyedBlocks = [];
   }
 
   recieveAttack([y, x]) {
+    this.#isBlockDestroyed([y, x]);
+
     if (this.field[y][x] instanceof Ship) {
       this.#addHits();
       this.field[y][x].hit(); // hit a ship
-      if (this.field[y][x].isSunk()) this.#ships.splice(this.field[y][x].id, 1, null);
+      if (this.field[y][x].isSunk())
+        this.#ships.splice(this.field[y][x].id, 1, null);
       this.field[y][x] = 1;
     } else {
       this.#addMisses();
       this.field[y][x] = -1;
     }
-    // checks if all the ships sunk
-    this.isAllShipSunk();
+    this.#addToDestroyedBlocks([y, x]);
   }
 
   getStat() {
@@ -94,7 +98,8 @@ export default class Gameboard {
   // ------ Private
   #checkForErrors(ship, [y, x]) {
     const beyondBorderError = "Cannot deploy beyond the border";
-    const alreadyOccupiedError = "A Ship has already been deploy on that coordinates";
+    const alreadyOccupiedError =
+      "A Ship has already been deploy on that coordinates";
 
     if (ship.orientation === "h") {
       if (x + ship.length - 1 > this.#size - 1) {
@@ -137,7 +142,14 @@ export default class Gameboard {
   }
 
   #generateShips() {
-    return [new Ship(2, 0), new Ship(2, 1), new Ship(3, 2), new Ship(3, 3), new Ship(4, 4), new Ship(5, 5)];
+    return [
+      new Ship(2, 0),
+      new Ship(2, 1),
+      new Ship(3, 2),
+      new Ship(3, 3),
+      new Ship(4, 4),
+      new Ship(5, 5),
+    ];
   }
 
   #addHits() {
@@ -146,5 +158,15 @@ export default class Gameboard {
 
   #addMisses() {
     this.#attacks.miss += 1;
+  }
+
+  #addToDestroyedBlocks([y, x]) {
+    this.#destroyedBlocks.push(`${y}${x}`);
+  }
+
+  #isBlockDestroyed([y, x]) {
+    if (this.#destroyedBlocks.includes(`${y}${x}`)) {
+      throw new Error("this block is already been destroyed");
+    }
   }
 }

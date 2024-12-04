@@ -7,5 +7,5 @@ Battleship is a turn-based guessing game where two playes guess on the board whe
 - Webpack
 - Jest
 - Babel-jest
-- Vanilla JS
+
 

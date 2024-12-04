@@ -1,10 +1,8 @@
 import BattleShip from "../game/Battleship";
-import displayGameboard from "./displayGameboard";
+import UI from "./UI";
 
 export default function deployInput() {
-  const MAX = 7;
-  const MIN = 0;
-  const container = document.querySelector(".deploy_input");
+  const container = document.createElement("div");
   const shipSelect = document.createElement("select");
   const xInput = document.createElement("input");
   const yInput = document.createElement("input");
@@ -13,12 +11,14 @@ export default function deployInput() {
   const orientationText = document.createElement("p");
 
   [xInput, yInput].forEach((input) => {
-    input.max = MAX;
-    input.min = MIN;
+    input.max = 7;
+    input.min = 0;
     input.type = "number";
   });
 
+  container.className = "deploy_input";
   shipSelect.className = "ship_select";
+
   button.textContent = "Deploy";
   rotateButton.textContent = "rotate";
 
@@ -27,9 +27,13 @@ export default function deployInput() {
 
   button.addEventListener("click", () => {
     BattleShip.deployPlayerShip(shipSelect.value, [yInput.value, xInput.value]);
-    displayGameboard(BattleShip.player.name, BattleShip.player.gameboard.field);
+    UI.getScreen("deploy").update();
     fillShipsSelect();
     updateCurrentOrientation();
+    if (BattleShip.player.gameboard.allShipsDeployed()) {
+      console.log("all ships deployed");
+      // change screen to battle screen
+    }
   });
 
   rotateButton.addEventListener("click", () => {
@@ -51,9 +55,22 @@ export default function deployInput() {
   }
 
   function updateCurrentOrientation() {
-    const ship = BattleShip.player.gameboard.getUndeployedShips(shipSelect.value);
-    if (ship) orientationText.textContent = ship.orientation === "h" ? "Horizontal" : "Vertical";
+    const ship = BattleShip.player.gameboard.getUndeployedShips(
+      shipSelect.value,
+    );
+    if (ship)
+      orientationText.textContent =
+        ship.orientation === "h" ? "Horizontal" : "Vertical";
   }
 
-  container.append(shipSelect, rotateButton, yInput, xInput, button, orientationText);
+  container.append(
+    shipSelect,
+    rotateButton,
+    yInput,
+    xInput,
+    button,
+    orientationText,
+  );
+
+  return container;
 }

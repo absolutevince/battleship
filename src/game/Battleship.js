@@ -1,16 +1,13 @@
-import displayGameboard from "../UI/displayGameboard.js";
 import Computer from "./Computer.js";
 import Player from "./Player.js";
-import deployInput from "../UI/deployInput.js";
 
 export default class BattleShip {
   static player = new Player("Player");
   static computer = Computer;
   static #winner = null;
+  static battling = false;
 
   static start() {
-    deployInput(); // display deploy input
-    displayGameboard(this.player.name, this.player.gameboard.field);
     this.#deployComputerShips();
   }
 
@@ -19,13 +16,13 @@ export default class BattleShip {
   }
 
   static attack(attackerName, [y, x]) {
-    if (attackerName === player.name) {
+    if (attackerName === this.player.name) {
       this.computer.gameboard.recieveAttack([y, x]);
-    } else {
-      this.player.gameboard.recieveAttack(computer.chooseTarget());
+    } else if (attackerName === this.computer.name) {
+      this.player.gameboard.recieveAttack([y, x]);
     }
 
-    if (this.#gameOver()) {
+    if (this.gameOver()) {
       alert(`Winner: ${this.#winner}`);
     }
   }
@@ -38,12 +35,12 @@ export default class BattleShip {
     }
   }
 
-  static #gameOver() {
-    if (player.gameboard.isAllShipSunk()) {
-      this.#winner = computer.name;
+  static gameOver() {
+    if (this.player.gameboard.isAllShipSunk()) {
+      this.#winner = this.computer.name;
       return true;
-    } else if (computer.gameboard.isAllShipSunk()) {
-      this.#winner = player.name;
+    } else if (this.computer.gameboard.isAllShipSunk()) {
+      this.#winner = this.player.name;
       return true;
     }
 
@@ -52,6 +49,5 @@ export default class BattleShip {
 
   static #deployComputerShips() {
     this.computer.deployAllShips();
-    displayGameboard(this.computer.name, this.computer.gameboard.field);
   }
 }
