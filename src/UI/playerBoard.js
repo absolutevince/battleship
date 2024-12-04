@@ -10,31 +10,35 @@ export default function playerBoard(user, playerField) {
     const rowEl = document.createElement("div");
     rowEl.className = "row";
     row.forEach((col, cIndex) => {
-      const colEl = document.createElement("div");
-      colEl.dataset.y = rIndex;
-      colEl.dataset.x = cIndex;
+      const block = document.createElement("div");
+      block.dataset.y = rIndex;
+      block.dataset.x = cIndex;
 
       if (col instanceof Ship) {
-        colEl.textContent = `[${col.length}]`;
+        if (user === BattleShip.player.name) {
+          block.className = "block ship";
+        } else if (user === BattleShip.computer.name) {
+          block.className = "block"; // remove the ship class to make the computer's ships hidden
+        }
       } else if (col === 0) {
-        colEl.textContent = "[ ]";
+        block.className = "block";
       } else if (col === 1) {
-        colEl.textContent = "X";
+        block.className = "block destroyed hit";
       } else {
-        colEl.textContent = "O";
+        block.className = "block destroyed miss";
       }
-      rowEl.append(colEl);
+      rowEl.append(block);
 
       if (user === BattleShip.computer.name) {
-        colEl.addEventListener("click", () => {
+        block.addEventListener("click", () => {
           if (BattleShip.gameOver()) {
             alert("The game is already over");
             return;
           }
           try {
             BattleShip.attack(BattleShip.player.name, [
-              +colEl.dataset.y,
-              +colEl.dataset.x,
+              +block.dataset.y,
+              +block.dataset.x,
             ]);
           } catch (error) {
             alert(error);

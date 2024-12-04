@@ -1,30 +1,62 @@
+:root {
+  --clr-block: #b1f0f7;
+  --clr-primary: #81bfda;
+  --clr-ship: #4335a7;
+  --clr-destroyed-hit: #ff7f3e;
+  --clr-destroyed-miss: #997c70;
+
+  --clr-txt-primary: #2a3663;
+  --clr-accent: #ff7f3e;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
 .wrapper {
   max-width: 1024px;
   margin: 0 auto;
 }
 
-.deploy_input {
-  margin-bottom: 0.5rem;
-  display: flex;
-  gap: 0.5rem;
+button {
+  padding: 0.5em 1.5em;
+  cursor: pointer;
+  background-color: var(--clr-accent);
+  border: none;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-radius: 5px;
 }
 
-.deploy_input input {
-  width: 5ch;
+.block {
+  background-color: var(--clr-block);
+  border-radius: 5px;
 }
 
-.gameboard {
-  display: flex;
-  gap: 1rem;
+.ship {
+  background-color: var(--clr-ship);
 }
 
-.player_board,
-.computer_board {
+.destroyed.hit {
+  background-color: var(--clr-destroyed-hit);
+}
+
+.destroyed.miss {
+  background-color: var(--clr-destroyed-miss);
+}
+
+.player_gameboard,
+.computer_gameboard {
+  --gap: 2px;
   display: grid;
   grid-template-rows: repeat(8, 32px);
+  gap: var(--gap);
 }
 
 .row {
   display: grid;
   grid-template-columns: repeat(8, 32px);
+  gap: var(--gap);
 }
