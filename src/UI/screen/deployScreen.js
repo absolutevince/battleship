@@ -11,6 +11,8 @@ export default function deployScreen() {
   const title = document.createElement("h1");
   const board = document.createElement("div");
   const button = document.createElement("button");
+  const arrowDown = document.createElement("div");
+  const arrowRight = document.createElement("div");
 
   title.textContent = "Deploy your Ships";
   button.textContent = "Start Battle";
@@ -40,7 +42,7 @@ export default function deployScreen() {
   screen.update();
 
   header.append(title);
-  body.append(board, button);
+  body.append(board, button, arrowDown, arrowRight);
 
   screen.append(header, body);
 

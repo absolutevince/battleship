@@ -11,10 +11,99 @@
   border-radius: 1rem;
 }
 
-.how_to_button {
+.home_screen .how_to_button {
   background-color: transparent;
 }
 
 .home_screen .title {
   font-size: 2rem;
+}
+
+.deploy_screen {
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+.deploy_screen .inputs,
+.deploy_screen .body {
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.deploy_screen .body {
+  flex-direction: column;
+}
+
+.deploy_screen .player_gameboard {
+  justify-content: center;
+}
+
+.deploy_screen .left,
+.deploy_screen .right {
+  display: grid;
+  gap: 0.5em;
+  transform: translateX(-1.5rem);
+}
+
+.deploy_screen .left {
+  justify-content: start;
+}
+
+.deploy_screen .left .current_ship {
+  rotate: 180deg;
+}
+
+.deploy_screen .left .coor {
+  display: flex;
+  gap: 5px;
+  justify-self: right;
+}
+
+.deploy_screen .deployment_ship {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 32px);
+  gap: 1px;
+  height: 32px;
+  width: calc(32px * 6);
+}
+
+.deploy_screen .left .coor > *,
+.left .ship_select {
+  padding: 0.5em;
+}
+
+.deploy_screen .right > * {
+  width: 15ch;
+}
+
+.battle_screen {
+  display: flex;
+  place-content: center;
+  gap: 2rem;
+  margin-top: 5rem;
+}
+
+.battle_screen .player,
+.battle_screen .computer {
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.battle_screen .computer {
+  border: 2px solid var(--clr-accent);
+  border-radius: 10px;
+}
+
+.battle_screen .computer .block {
+  cursor: pointer;
+}
+
+.battle_screen .computer .block:hover {
+  border: 2px solid var(--clr-accent);
 }
