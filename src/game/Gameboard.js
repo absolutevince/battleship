@@ -38,9 +38,8 @@ export default class Gameboard {
     };
   }
 
-  deployShip(id, [y, x]) {
-    const ship = this.#undeployedShips[id];
-
+  deployShip([y, x]) {
+    const ship = this.getUndeployedShip();
     this.#checkForErrors(ship, [y, x]);
 
     for (let i = 0; i < ship.length; i++) {
@@ -50,7 +49,8 @@ export default class Gameboard {
         this.field[y + i][x] = ship;
       }
     }
-    this.#undeployedShips[id] = null;
+
+    this.#undeployedShips.shift();
     // replace the value of index id with null to keep on correctly indexing the item using it's id, since the ship's id is the index its index in the array
   }
 
@@ -70,14 +70,12 @@ export default class Gameboard {
     }
   }
 
-  toggleShipOrientation(id) {
-    this.#undeployedShips.forEach((ship) => {
-      if (ship) {
-        if (ship.id === id) {
-          ship.toggleOrientation();
-        }
-      }
-    });
+  getUndeployedShip() {
+    return this.#undeployedShips[0];
+  }
+
+  toggleShipOrientation() {
+    this.#undeployedShips[0].toggleOrientation();
   }
 
   isAllShipSunk() {

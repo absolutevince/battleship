@@ -24,22 +24,16 @@ export default class Computer {
   }
 
   static deployAllShips() {
-    const ids = this.gameboard.getUndeployedShips().map((s) => s.id);
-    let current = ids[0];
-
-    while (ids.length) {
+    while (this.gameboard.getUndeployedShips().length) {
       const rotate = Math.floor(Math.random() * 2);
       const [y, x] = this.randomCoordinates();
 
-      if (rotate) this.gameboard.toggleShipOrientation(current);
+      if (rotate) this.gameboard.toggleShipOrientation();
       try {
-        this.gameboard.deployShip(current, [y, x]);
+        this.gameboard.deployShip([y, x]);
       } catch (error) {
-        current = ids[0];
         continue;
       }
-
-      current = ids.shift();
     }
   }
 

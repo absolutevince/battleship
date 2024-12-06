@@ -27,9 +27,9 @@ export default class BattleShip {
     }
   }
 
-  static deployPlayerShip(id, [y, x]) {
+  static deployPlayerShip([y, x]) {
     try {
-      this.player.gameboard.deployShip(+id, [+y, +x]);
+      this.player.gameboard.deployShip([+y, +x]);
     } catch (error) {
       alert(error);
     }

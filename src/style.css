@@ -2,6 +2,7 @@
   --clr-block: #b1f0f7;
   --clr-primary: #81bfda;
   --clr-ship: #4335a7;
+  --clr-error: #e73879;
   --clr-destroyed-hit: #ff7f3e;
   --clr-destroyed-miss: #997c70;
 
@@ -59,4 +60,20 @@ button {
   display: grid;
   grid-template-columns: repeat(8, 32px);
   gap: var(--gap);
+}
+
+.hover {
+  border: 2px solid var(--clr-accent);
+}
+
+.deploy_hover {
+  border: 2px solid var(--clr-ship);
+}
+
+.deploy_hover.error {
+  border: 2px solid var(--clr-error);
+}
+
+.deployment_ship {
+  animation-fill-mode: forwards;
 }

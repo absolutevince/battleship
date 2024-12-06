@@ -42,8 +42,7 @@
   justify-content: center;
 }
 
-.deploy_screen .left,
-.deploy_screen .right {
+.deploy_screen {
   display: grid;
   gap: 0.5em;
   transform: translateX(-1.5rem);
@@ -53,14 +52,12 @@
   justify-content: start;
 }
 
-.deploy_screen .left .current_ship {
+.deploy_screen .current_ship {
   rotate: 180deg;
 }
 
-.deploy_screen .left .coor {
-  display: flex;
-  gap: 5px;
-  justify-self: right;
+.deploy_screen .rotate_button {
+  width: 15ch;
 }
 
 .deploy_screen .deployment_ship {
@@ -69,15 +66,6 @@
   gap: 1px;
   height: 32px;
   width: calc(32px * 6);
-}
-
-.deploy_screen .left .coor > *,
-.left .ship_select {
-  padding: 0.5em;
-}
-
-.deploy_screen .right > * {
-  width: 15ch;
 }
 
 .battle_screen {
